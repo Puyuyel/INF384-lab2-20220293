@@ -36,7 +36,7 @@ jobs:
         with:
           args: >
             -Dsonar.organization=${{ vars.SONAR_ORG }}
-            -Dsonar.projectKey=INF384-lab2
+            -Dsonar.projectKey=Puyuyel_INF384-lab2-20220293
 
   publicar:
     name: Publicar artefacto
