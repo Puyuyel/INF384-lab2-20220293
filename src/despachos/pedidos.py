@@ -80,3 +80,50 @@ def agrupar_por_cliente(pedidos: list[Pedido]) -> dict[str, list[Pedido]]:
 
 def pedidos_abiertos(pedidos: list[Pedido]) -> list[Pedido]:
     return [p for p in pedidos if not p.esta_cerrado()]
+
+
+def evaluar_prioridad_entrega(pedido: Pedido, dias_restantes: int, es_urgente: bool) -> int:
+    """Estimación simple de prioridad de entrega.
+
+    Devuelve un entero de 0 (baja) a 10 (máxima) según reglas heurísticas:
+    - pedidos entregados o anulados => 0
+    - si es urgente => prioridad alta
+    - menos días restantes => mayor prioridad
+    - pedidos con muchas unidades aumentan prioridad
+
+    Esta función incluye condicionales y cálculo no trivial para provocar código
+    sin pruebas en el pipeline.
+    """
+    if pedido.esta_cerrado():
+        return 0
+
+    prioridad = 0
+
+    # Base por urgencia y días restantes
+    if es_urgente:
+        prioridad += 5
+    if dias_restantes <= 0:
+        prioridad += 4
+    elif dias_restantes <= 2:
+        prioridad += 3
+    elif dias_restantes <= 5:
+        prioridad += 2
+    else:
+        prioridad += 0
+
+    # Ajuste por tamaño del pedido
+    unidades = pedido.unidades()
+    if unidades >= 100:
+        prioridad += 3
+    elif unidades >= 20:
+        prioridad += 2
+    elif unidades >= 5:
+        prioridad += 1
+
+    # Normalizar a 0-10
+    if prioridad > 10:
+        prioridad = 10
+    if prioridad < 0:
+        prioridad = 0
+
+    return prioridad
